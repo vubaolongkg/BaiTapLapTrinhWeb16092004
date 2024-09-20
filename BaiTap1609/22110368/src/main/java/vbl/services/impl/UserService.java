@@ -56,4 +56,10 @@ public class UserService implements IUserService {
 		return userDao.checkExistPhone(phone);
 	}
 
+	@Override
+	public boolean update(UserModel user) {
+		return userDao.update(user);
+		
+	}
+
 }

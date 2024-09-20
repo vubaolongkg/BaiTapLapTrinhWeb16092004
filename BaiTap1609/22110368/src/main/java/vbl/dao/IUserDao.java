@@ -21,4 +21,6 @@ public interface IUserDao {
 	boolean checkExistPhone(String phone);
 
 	void insertRegister(UserModel user);
+	
+	boolean update(UserModel user);
 }

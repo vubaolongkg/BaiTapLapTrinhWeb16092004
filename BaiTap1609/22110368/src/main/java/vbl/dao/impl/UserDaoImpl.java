@@ -113,8 +113,11 @@ public class UserDaoImpl implements IUserDao {
 
 	public static void main(String[] args) {
 		try {
+			Connection conn = JDBCConnectMySQL.getConnection();
 			IUserDao userDao = new UserDaoImpl();
-			System.out.println(userDao.findById(1));
+			boolean a = userDao.checkExistEmail("vubaolong1484@gmail.com");
+			System.out.println(a);
+			System.out.println(conn);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -142,23 +145,26 @@ public class UserDaoImpl implements IUserDao {
 
 	@Override
 	public boolean checkExistEmail(String email) {
-		boolean duplicate = false;
-		String query = "select * from [users] where email = ?";
-		try {
-			conn = new JDBCConnectMySQL().getConnection();
-			ps = conn.prepareStatement(query);
-			ps.setString(1, email);
-			rs = ps.executeQuery();
-			if (rs.next()) {
-				duplicate = true;
-			}
-			ps.close();
-			conn.close();
-		} catch (Exception ex) {
-		}
-		return duplicate;
-
+	    boolean duplicate = false;
+	    String query = "select email from users where email = ?";
+	    
+	    try (Connection conn = new JDBCConnectMySQL().getConnection();
+	         PreparedStatement ps = conn.prepareStatement(query)) {
+	         
+	        ps.setString(1, email);
+	        try (ResultSet rs = ps.executeQuery()) {
+	            if (rs.next()) {
+	                duplicate = true;
+	            }
+	        }
+	        
+	    } catch (Exception ex) {
+	        ex.printStackTrace(); // Better to use a logging framework in a production environment
+	    }
+	    
+	    return duplicate;
 	}
+
 
 	@Override
 	public boolean checkExistUsername(String username) {
@@ -196,4 +202,39 @@ public class UserDaoImpl implements IUserDao {
 		} catch (Exception ex) {}
 		return duplicate;
 	}
+
+	@Override
+	public boolean update(UserModel user) {
+		String sql = "UPDATE users SET password = ? WHERE username = ? AND email = ?";
+	    try {
+	        conn = new JDBCConnectMySQL().getConnection();
+	        ps = conn.prepareStatement(sql);
+
+	        // Gán các tham số từ đối tượng user
+	        ps.setString(1, user.getPassword());  // Lấy mật khẩu mới từ đối tượng user
+	        ps.setString(2, user.getUsername());  // Lấy username từ đối tượng user
+	        ps.setString(3, user.getEmail());  // Lấy email từ đối tượng user
+
+	        int rowsUpdated = ps.executeUpdate();
+
+	        // Nếu có ít nhất một bản ghi được cập nhật thì trả về true
+	        if (rowsUpdated > 0) {
+	            return true;
+	        }
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    } finally {
+	        try {
+	            if (ps != null) ps.close();
+	            if (conn != null) conn.close();
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }
+	    }
+
+	    return false;
+	}
+	
+	
 }
