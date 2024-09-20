@@ -5,6 +5,7 @@ import java.sql.Date;
 
 public class UserModel implements Serializable {
 
+	
 	/**
 	 * 
 	 */
@@ -25,6 +26,19 @@ public class UserModel implements Serializable {
 			String phone, int roleid, Date createDate) {
 		super();
 		this.id = id;
+		this.username = username;
+		this.password = password;
+		this.images = images;
+		this.fullname = fullname;
+		this.email = email;
+		this.phone = phone;
+		this.roleid = roleid;
+		this.createDate = createDate;
+	}
+	
+	public UserModel(String username, String password, String images, String fullname, String email, String phone,
+			int roleid, Date createDate) {
+		super();
 		this.username = username;
 		this.password = password;
 		this.images = images;
