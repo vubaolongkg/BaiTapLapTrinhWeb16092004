@@ -31,7 +31,7 @@ public class loginController extends HttpServlet {
 		resp.setCharacterEncoding("UTF-8");
 		req.setCharacterEncoding("UTF-8");
 		String username = req.getParameter("uname");
-		String password = req.getParameter("psw");
+		String password = req.getParameter("password");
 		boolean isRememberMe = false;
 		String remember = req.getParameter("remember");
 

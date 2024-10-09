@@ -8,4 +8,6 @@ public class Constant {
 	    public static final String REGISTER = "/views/register.jsp"; // hoặc đường dẫn tới file của bạn
 	    public static final String FORGOT = "/views/forgot_password.jsp"; // hoặc đường dẫn tới file của bạn
 	}
+	
+	public static final String DIR = "D:\\Bao_Long\\Ảnh";
 }

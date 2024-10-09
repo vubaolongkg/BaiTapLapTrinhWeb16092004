@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import vbl.configs.JDBCConnectMySQL;
+import vbl.configs.JDBCConnectSQLServer;
 import vbl.dao.IUserDao;
 import vbl.models.UserModel;
 
@@ -22,7 +23,7 @@ public class UserDaoImpl implements IUserDao {
 		String sql = "SELECT * FROM users ";
 		List<UserModel> list = new ArrayList<UserModel>();
 		try {
-			Connection conn = new JDBCConnectMySQL().getConnection();
+			Connection conn = new JDBCConnectSQLServer().getConnection();
 			ps = conn.prepareStatement(sql);
 			rs = ps.executeQuery();
 			while (rs.next()) {
@@ -41,7 +42,7 @@ public class UserDaoImpl implements IUserDao {
 	public UserModel findById(int id) {
 		String sql = "SELECT * FROM users WHERE id = ? ";
 		try {
-			Connection conn = new JDBCConnectMySQL().getConnection();
+			Connection conn = new JDBCConnectSQLServer().getConnection();
 			ps = conn.prepareStatement(sql);
 			ps.setInt(1, id);
 			rs = ps.executeQuery();
@@ -88,7 +89,7 @@ public class UserDaoImpl implements IUserDao {
 	public UserModel findByUserName(String username) {
 		String sql = "SELECT * FROM users WHERE username = ? ";
 		try {
-			Connection conn = new JDBCConnectMySQL().getConnection();
+			Connection conn = new JDBCConnectSQLServer().getConnection();
 			ps = conn.prepareStatement(sql);
 			ps.setString(1, username);
 			rs = ps.executeQuery();
@@ -113,7 +114,7 @@ public class UserDaoImpl implements IUserDao {
 
 	public static void main(String[] args) {
 		try {
-			Connection conn = JDBCConnectMySQL.getConnection();
+			Connection conn = new JDBCConnectSQLServer().getConnection();
 			IUserDao userDao = new UserDaoImpl();
 			boolean a = userDao.checkExistEmail("vubaolong1484@gmail.com");
 			System.out.println(a);
@@ -127,7 +128,7 @@ public class UserDaoImpl implements IUserDao {
 	public void insertRegister(UserModel user) {
 		String sql = "INSERT INTO [Users](email, username, fullname, password, avatar, roleid,phone,createddate) VALUES (?,?,?,?,?,?,?,?)";
 		try {
-			conn = new JDBCConnectMySQL().getConnection();
+			conn = new JDBCConnectSQLServer().getConnection();
 			ps = conn.prepareStatement(sql);
 			ps.setString(1, user.getEmail());
 			ps.setString(2, user.getUsername());
@@ -148,7 +149,7 @@ public class UserDaoImpl implements IUserDao {
 	    boolean duplicate = false;
 	    String query = "select email from users where email = ?";
 	    
-	    try (Connection conn = new JDBCConnectMySQL().getConnection();
+	    try (Connection conn = new JDBCConnectSQLServer().getConnection();
 	         PreparedStatement ps = conn.prepareStatement(query)) {
 	         
 	        ps.setString(1, email);
@@ -171,7 +172,7 @@ public class UserDaoImpl implements IUserDao {
 		boolean duplicate = false;
 		String query = "select * from [Users] where username = ?";
 		try {
-		conn = new JDBCConnectMySQL().getConnection();
+		conn = new JDBCConnectSQLServer().getConnection();
 		ps = conn.prepareStatement(query);
 		ps.setString(1, username);
 		rs = ps.executeQuery();
@@ -190,7 +191,7 @@ public class UserDaoImpl implements IUserDao {
 		String query = "select * from [Users"
 				+ "] where phone = ?";
 		try {
-		conn = new JDBCConnectMySQL().getConnection();
+		conn = new JDBCConnectSQLServer().getConnection();
 		ps = conn.prepareStatement(query);
 		ps.setString(1, phone);
 		rs = ps.executeQuery();
@@ -207,7 +208,7 @@ public class UserDaoImpl implements IUserDao {
 	public boolean update(UserModel user) {
 		String sql = "UPDATE users SET password = ? WHERE username = ? AND email = ?";
 	    try {
-	        conn = new JDBCConnectMySQL().getConnection();
+	        conn = new JDBCConnectSQLServer().getConnection();
 	        ps = conn.prepareStatement(sql);
 
 	        // Gán các tham số từ đối tượng user

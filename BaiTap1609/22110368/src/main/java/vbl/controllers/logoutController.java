@@ -17,14 +17,8 @@ public class logoutController extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		// Lấy session hiện tại
         HttpSession session = req.getSession(false); // False để tránh tạo session mới nếu không có
-        
-        if (session != null) {
-            // Hủy session
-            session.invalidate();
-        }
-        
-        // Chuyển hướng về trang đăng nhập
-        resp.sendRedirect(req.getContextPath() + "/login");
+        session.removeAttribute("account");
+        resp.sendRedirect("home");
 	}
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
