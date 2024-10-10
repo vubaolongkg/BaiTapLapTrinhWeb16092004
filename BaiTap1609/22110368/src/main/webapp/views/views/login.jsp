@@ -13,8 +13,7 @@
 					<h3 class="alert alertdanger">${alert}</h3>
 				</c:if>
 				<form action="${pageContext.request.contextPath}/login"
-					method="post" class="form-horizontal form-without-legend"
-					role="form">
+					method="post" class="form-horizontal form-without-legend" role="form">
 					<div class="form-group">
 						<label for="email" class="col-lg-4 control-label">Username
 							<span class="require">*</span>
