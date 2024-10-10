@@ -12,7 +12,7 @@ import vbl.models.CategoryModel;
 import vbl.services.ICategoryService;
 import vbl.services.impl.CategoryServiceImpl;
 
-@WebServlet(urlPatterns = { "/admin/categories", "/admin/category/add", "/admin/category/insert", "/admin/category/edit", "/admin/category/update" })
+@WebServlet(urlPatterns = { "/admin/categories", "/admin/category/add", "/admin/category/insert", "/admin/category/edit", "/admin/category/update", "/admin/category/delete" })
 public class CategoryController extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
@@ -36,6 +36,11 @@ public class CategoryController extends HttpServlet {
 			req.setAttribute("cate", category);
 			
 			req.getRequestDispatcher("/views/admin/category-edit.jsp").forward(req, resp);
+		} else if (url.contains("delete")) {
+			String id = req.getParameter("id");
+			categoryService.delete(Integer.parseInt(id));
+			resp.sendRedirect(req.getContextPath() + "/admin/categories");
+			
 		}
 		
 	}
@@ -60,20 +65,48 @@ public class CategoryController extends HttpServlet {
 			System.out.println(category.toString());
 			resp.sendRedirect(req.getContextPath() + "/admin/categories");
 		} else if (url.contains("update")) {
-			int categoryid = Integer.parseInt(req.getParameter("categoryid"));
-			String categoryname = req.getParameter("categoryname");
-			String status = req.getParameter("status");
-			int statuss = Integer.parseInt(status);
-			String images = "https://anphat.com.vn/media/product/47469_acer_gaming_aspire_5_a515_58gm_53pz_anphatpc55_1.jpg";
+		    try {
+		        // Lấy và chuyển đổi categoryid
+		        int categoryid = Integer.parseInt(req.getParameter("categoryid"));
+
+		        // Lấy các thông tin khác từ form
+		        String categoryname = req.getParameter("categoryname");
+
+		        // Kiểm tra và chuyển đổi status thành int, nếu không hợp lệ trả về 0
+		        String status = req.getParameter("status");
+		        int statuss;
+		        try {
+		            statuss = Integer.parseInt(status);
+		        } catch (NumberFormatException e) {
+		            statuss = 0; // Giá trị mặc định hoặc có thể đưa ra thông báo lỗi
+		        }
+
+		        // Lấy hình ảnh, nếu từ form hoặc giữ nguyên hình mặc định
+		        String images = req.getParameter("images");
+		        if (images == null || images.isEmpty()) {
+		            images = "https://anphat.com.vn/media/product/47469_acer_gaming_aspire_5_a515_58gm_53pz_anphatpc55_1.jpg"; // Hình mặc định
+		        }
+
+		        // Tạo đối tượng category
+		        CategoryModel category = new CategoryModel();
+		        category.setCategoryid(categoryid);
+		        category.setCategoryname(categoryname);
+		        category.setImages(images);
+		        category.setStatus(statuss);
+
+		        // Cập nhật category vào cơ sở dữ liệu
+		        categoryService.update(category);
+
+		        // Điều hướng lại trang sau khi cập nhật thành công
+		        resp.sendRedirect(req.getContextPath() + "/admin/categories");
+		    } catch (Exception e) {
+		        e.printStackTrace();
+		        // Xử lý lỗi, có thể chuyển hướng tới trang lỗi hoặc hiển thị thông báo
+		        resp.sendRedirect(req.getContextPath() + "/admin/error");
+		    }
+		} else if (url.contains("delete")) {
 			
-			CategoryModel category = new CategoryModel();
-			category.setCategoryid(categoryid);
-			category.setCategoryname(categoryname);
-			category.setImages(images);
-			category.setStatus(statuss);
-			
-			categoryService.update(category);
-			resp.sendRedirect(req.getContextPath() + "/admin/categories");
 		}
+
 	}
 }

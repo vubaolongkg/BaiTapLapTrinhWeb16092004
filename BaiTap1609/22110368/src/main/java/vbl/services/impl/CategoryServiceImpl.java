@@ -47,9 +47,9 @@ public class CategoryServiceImpl implements ICategoryService {
 	public void update(CategoryModel category) {
 		// TODO Auto-generated method stub
 		CategoryModel cate = this.findById(category.getCategoryid());
-		if (cate == null) {
+		if (cate != null) {
 			cateDao.update(category);
-		}
+		} 
 	}
 
 	@Override

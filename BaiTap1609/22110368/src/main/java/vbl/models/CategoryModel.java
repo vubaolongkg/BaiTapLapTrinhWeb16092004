@@ -21,6 +21,13 @@ public class CategoryModel implements Serializable {
 		this.images = images;
 		this.status = status;
 	}
+	
+	public CategoryModel(String categoryname, String images, int status) {
+		super();
+		this.categoryname = categoryname;
+		this.images = images;
+		this.status = status;
+	}
 	public int getCategoryid() {
 		return categoryid;
 	}

@@ -13,7 +13,6 @@ import vbl.services.IUserService;
 import vbl.services.impl.UserService;
 import vbl.utils.Constant;
 
-@SuppressWarnings("serial")
 @WebServlet(urlPatterns = "/register")
 public class registerController extends HttpServlet {
 
